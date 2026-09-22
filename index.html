@@ -1,0 +1,1051 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ortho Midterm</title>
+    <style>
+      /* ===== General Layout ===== */
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu,
+          sans-serif;
+        background-color: #f9fafb;
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 40px 20px;
+        max-width: 820px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+        background-color: #1d4ed8;
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      h3 {
+        margin-top: 1.8em;
+        color: #1e3a8a;
+        font-size: 1.2rem;
+      }
+
+      h3 .qnum {
+        display: inline-block;
+        min-width: 1.6em;
+        color: #6b7280;
+        font-weight: 700;
+      }
+
+      p {
+        margin-bottom: 0.5em;
+      }
+
+      /* ===== Question and Choices ===== */
+      ul {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 12px;
+        margin-bottom: 28px;
+      }
+
+      li {
+        background-color: #ffffff;
+        margin: 6px 0;
+        padding: 10px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      li:hover {
+        background-color: #e0e7ff;
+        border-color: #6366f1;
+      }
+
+      .correct {
+        background-color: #bbf7d0 !important;
+        border-color: #22c55e !important;
+        color: #064e3b;
+      }
+
+      .incorrect {
+        background-color: #fecaca !important;
+        border-color: #ef4444 !important;
+        color: #7f1d1d;
+      }
+
+      .feedback {
+        margin-top: 6px;
+        font-weight: 600;
+        padding-left: 4px;
+      }
+
+      li,
+      h2 {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      }
+
+      @media (max-width: 600px) {
+        body {
+          padding: 20px 12px;
+        }
+        h2 {
+          font-size: 1.5rem;
+        }
+        h3 {
+          font-size: 1.1rem;
+        }
+      }
+
+      /* ===== Password Gate ===== */
+      #loginWrap {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 24, 39, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 9999;
+      }
+
+      #loginCard {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 20px 18px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      #loginCard input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        margin-top: 12px;
+        box-sizing: border-box;
+      }
+
+      #loginCard button {
+        width: 100%;
+        margin-top: 12px;
+        padding: 10px 12px;
+        border: 0;
+        border-radius: 8px;
+        background-color: #1d4ed8;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+      }
+
+      #loginCard button:hover {
+        background-color: #1e40af;
+      }
+
+      /* ===== Back to Midterm 1 link ===== */
+      #backLink {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 5000;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 16px;
+        background-color: #1d4ed8;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none;
+        border-radius: 9999px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition:
+          background-color 0.15s ease,
+          transform 0.15s ease;
+      }
+
+      #backLink:hover {
+        background-color: #1e40af;
+        transform: translateY(-1px);
+      }
+
+      @media (max-width: 600px) {
+        #backLink {
+          left: 12px;
+          bottom: 12px;
+          padding: 9px 14px;
+          font-size: 0.85rem;
+        }
+      }
+
+      /* ===== Unanswered toggle ===== */
+      .noAnswer {
+        border-style: dashed;
+      }
+      .noAnswer li {
+        cursor: default;
+        background-color: #f3f4f6;
+      }
+      .noAnswer li:hover {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="backLink" href="https://natehoang.github.io/OrthoMidterm/"
+      >&larr; Back to Midterm 1</a
+    >
+
+    <h2>Ortho Midterm</h2>
+
+    <div id="loginWrap">
+      <div id="loginCard">
+        <h3 style="margin-top: 0">Enter password</h3>
+        <input
+          id="passwordInput"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Password"
+        />
+        <button id="loginBtn" type="button">Enter</button>
+        <div
+          id="loginError"
+          role="alert"
+          style="
+            display: none;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #b91c1c;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <div id="questions" style="display: none"></div>
+
+    <script>
+      // ============================================================
+      //  QUESTIONS
+      //  Each item: { q, choices: [...], answer: "A"|"B"|"C"|"D"|null }
+      //  answer: null means no correct answer was recorded -> the
+      //  question is shown but not clickable/gradable.
+      // ============================================================
+      const questions = [
+        {
+          q: "Two identical 100 g forces are applied to the same tooth. Force A acts 5 mm from the center of resistance, while Force B acts 10 mm from it. Which interpretation best predicts the difference in tooth response?",
+          choices: [
+            "Force A produces twice the moment and therefore more rotation.",
+            "Force B produces twice the moment and therefore a greater tendency to rotate.",
+            "Both forces produce the same moment because their magnitudes are equal.",
+            "Force B produces translation because its point of application is farther from the center of resistance.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A clinician changes a retraction system from 60 g acting 8 mm from the center of resistance to 40 g acting 12 mm from it. What conclusion follows from comparing the two systems?",
+          choices: [
+            "The second system creates a larger moment because the moment arm is longer.",
+            "The first system creates a larger moment because the force is greater.",
+            "Both systems create the same moment, although the second applies a smaller force.",
+            "Neither system creates a moment because both use light forces.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A force system is redesigned so that the line of action passes directly through the tooth's center of resistance and no couple is added. Which movement should the clinician expect?",
+          choices: [
+            "Pure rotation without translation",
+            "Uncontrolled tipping around the center of resistance",
+            "Root movement with the crown nearly stationary",
+            "Translation with minimal rotational tendency",
+          ],
+          answer: "D",
+        },
+        {
+          q: "An appliance applies two forces that are equal in magnitude, parallel, and opposite in direction, with separate lines of action. How should the resulting system be analyzed?",
+          choices: [
+            "The forces cancel completely, so the tooth should not move.",
+            "The system produces intrusion because the net force is zero.",
+            "The forces combine into a larger single force through the center of resistance.",
+            "The translational effects cancel, leaving a pure moment.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A single horizontal force is applied at the bracket of an incisor without a counteracting couple. The crown moves in the force direction while the root apex moves oppositely. Which movement pattern best explains this observation?",
+          choices: [
+            "Bodily movement",
+            "Controlled tipping",
+            "Root movement",
+            "Uncontrolled tipping",
+          ],
+          answer: "D",
+        },
+        {
+          q: "During space closure, a clinician adjusts the couple until its counter-moment equals the moment created by the retraction force. Which tooth response should result from this balance?",
+          choices: [
+            "Uncontrolled tipping because the force still acts on the crown",
+            "Root movement because the couple is larger than the force moment",
+            "Pure rotation because equal moments eliminate translation",
+            "Bodily movement because the net rotational tendency is neutralized",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A clinician increases the counter-moment beyond the moment produced by the crown force. The crown becomes relatively stable while the root moves. Which interpretation is most appropriate?",
+          choices: [
+            "The system has returned to uncontrolled tipping.",
+            "The moment-to-force relationship now favors root movement.",
+            "The forces form a pure couple with no translational component.",
+            "The line of action must be passing through the center of resistance.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "An intrusive force is directed along an incisor's long axis and its line of action is arranged to pass near the center of resistance. Why is this design preferable to an equally strong force applied labial to that line?",
+          choices: [
+            "It concentrates pressure at the alveolar crest to accelerate intrusion.",
+            "It creates a larger couple and therefore more root control.",
+            "It converts intrusion into controlled tipping.",
+            "It reduces the unwanted moment that would tip the tooth during intrusion.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A rotated premolar needs correction without purposeful translation. Which force system best matches that objective?",
+          choices: [
+            "Equal collinear forces directed apically",
+            "A single force through the center of resistance",
+            "A single force at the crown with no counter-moment",
+            "A couple that produces a pure moment",
+          ],
+          answer: "D",
+        },
+        {
+          q: "An incisor has lost alveolar bone height, moving the midpoint of its embedded root apically. If the original bracket force is unchanged, what mechanical consequence is most likely?",
+          choices: [
+            "The center of resistance shifts coronally and the moment arm becomes shorter",
+            "The center of resistance shifts apically, and crown force moment becomes longer",
+            "The center of resistance remains unchanged, but the tooth becomes more stable",
+            "The center of resistance shifts apically, but the moment arm becomes shorter",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A crown force produces a 600 g-mm clockwise moment. The archwire generates a 600 g-mm counterclockwise couple while maintaining the same net force. How should the resulting motion be interpreted?",
+          choices: [
+            "The opposing moments cancel, favoring bodily movement.",
+            "The two moments add, producing root movement.",
+            "The couple cancels the net force, producing pure rotation.",
+            "The tooth remains stationary because both force and moment are zero.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "Two wires made from the same alloy carry the same load, but Wire A has a smaller cross-sectional area. Which comparison best explains why Wire A is more likely to approach its material limit?",
+          choices: [
+            "Wire A experiences less stress because it contains less material",
+            "Wire A experiences more strain but exactly the same stress",
+            "Wire A experiences greater stress because the same force is distributed over a smaller area",
+            "Cross-sectional area changes force but cannot change stress",
+          ],
+          answer: "A",
+        },
+        {
+          q: "Wire A deflects 2 mm over an active length of 20 mm. Wire B deflects 2 mm over 40 mm. Which analysis of strain is correct?",
+          choices: [
+            "Wire A has twice the strain of Wire B.",
+            "Wire B has twice the strain of Wire A.",
+            "Both have equal strain because their deflections are equal.",
+            "Strain cannot be compared unless force is known.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A stress-strain plot is linear at first and then begins to curve. A student applies Hooke's law to the entire curve. Which critique is most accurate?",
+          choices: [
+            "Hooke's law applies only after the yield point.",
+            "Hooke's law cannot be used for orthodontic wires because they behave as beams.",
+            "Hooke's law applies only when strain becomes permanent.",
+            "Hooke's law describes the proportional linear region, not the later nonlinear region.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "After an archwire is deflected slightly beyond its yield strength and then unloaded, it does not fully return to its original form. Which interpretation best explains the residual bend?",
+          choices: [
+            "The wire remained below the proportional limit and stored only elastic energy.",
+            "The modulus of elasticity became zero during unloading.",
+            "Ultimate tensile strength was reached, so the wire must have fractured.",
+            "The wire exceeded its elastic range and acquired permanent deformation.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "Two wires have similar strength, but Wire X has a much steeper slope in the elastic portion of its stress-strain curve. What should the clinician infer?",
+          choices: [
+            "Wire X has a higher modulus of elasticity and is stiffer.",
+            "Wire X has a lower modulus of elasticity and is more flexible.",
+            "Wire X has greater formability because its slope is steeper.",
+            "Wire X has a larger range because stiffness and range always rise together.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "Wire X and Wire Y have similar force levels, but Wire X can be deflected farther before permanent deformation begins. Which property is greater for Wire X?",
+          choices: [
+            "Modulus of elasticity",
+            "Ultimate tensile strength only",
+            "Stress concentration",
+            "Range",
+          ],
+          answer: "D",
+        },
+        {
+          q: "Two materials reach their proportional limits at different points. Material A has the larger area under its stress-strain curve up to that limit. Which clinical inference is best supported?",
+          choices: [
+            "Material A can store more elastic energy before permanent deformation.",
+            "Material A must be easier to bend permanently into loops.",
+            "Material A must have a lower ultimate tensile strength.",
+            "Material A will always deliver a lower force at every deflection.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "An auxiliary spring must store substantial elastic energy during activation but also tolerate permanent chairside shaping without breaking. Which property profile best fits the task?",
+          choices: [
+            "Low resilience and low formability",
+            "High stiffness and low range only",
+            "High resilience with reasonably high formability",
+            "High ultimate strength with brittleness",
+          ],
+          answer: "C",
+        },
+        {
+          q: "Two similar patients show different rates of tooth movement. One frequently uses ibuprofen, and the other receives bisphosphonate therapy. Which shared mechanism most plausibly explains slower movement in both?",
+          choices: [
+            "Both increase superelasticity of the archwire.",
+            "Both raise PDL pressure by reducing root surface area.",
+            "Both convert frontal bone resorption into undermining bone resorption.",
+            "Both can reduce bone-remodeling activity, through prostaglandin inhibition or suppression of osteoclast function.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A patient expects corticotomy to shorten every stage of a comprehensive treatment equally. Which counseling statement best reflects the evidence presented?",
+          choices: [
+            "The benefit is strongest for early alignment and may be limited to the early phase, while cost, invasiveness, pain, bruising, and tissue damage remain concerns.",
+            "Corticotomy is noninvasive and has proven equal benefit throughout treatment.",
+            "Corticotomy works by eliminating the need for bone remodeling.",
+            "Corticotomy has no effect during the first 2 to 3 months but accelerates finishing.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "An elastic chain closes a small midline diastema by moving the two central incisors equally toward each other. Which anchorage strategy is illustrated?",
+          choices: [
+            "Reciprocal anchorage, because equal and opposite forces produce similar movement in both units",
+            "Reinforced anchorage, because an extraoral unit resists movement",
+            "Stationary anchorage, because one segment tips and the other moves bodily",
+            "Skeletal anchorage, because the force does not create a reaction",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A single force applied to the crown creates tipping. Which pressure pattern should be expected along the PDL according to the biomechanical analysis?",
+          choices: [
+            "Uniform pressure along the entire root surface",
+            "Maximum pressure at the center of resistance and zero at the apex and crest",
+            "Higher pressure near the root apex and alveolar crest, decreasing toward zero near the center of rotation",
+            "Pressure only on the tension side because the compression side is unloaded",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A 5-year-old has a mild skeletal discrepancy, no incisor trauma risk, no functional shift, and no psychosocial concern. The parents request immediate growth modification because the child is growing rapidly. Which analysis best supports the treatment decision?",
+          choices: [
+            "Monitor growth and postpone active treatment because very early correction can prolong care and is often reversed by later growth.",
+            "Begin full correction now because early growth guarantees a stable skeletal result.",
+            "Wait until all growth has stopped because growth modification is most predictable in adults.",
+            "Use a fixed appliance solely to eliminate any need for retention.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A 19-year-old with completed growth has a marked skeletal Class III discrepancy. The proposed plan relies on a removable appliance to stimulate forward maxillary growth. Which critique is most appropriate?",
+          choices: [
+            "The plan is appropriate because vertical growth continues after every other type of growth has stopped.",
+            "The plan will predictably enlarge the maxilla if wear time exceeds 12 hours per day.",
+            "The plan should use lighter force because adult sutures respond better to gentle orthopedic loading.",
+            "The plan is unlikely to modify jaw growth after growth cessation; camouflage or surgical options require consideration.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A patient appears to have a narrow maxilla when viewed in habitual occlusion, but the transverse relationship becomes normal when the mandible is guided out of a forward functional position. What is the most important conclusion before prescribing expansion?",
+          choices: [
+            "Any posterior crossbite proves that the midpalatal suture must be opened.",
+            "The apparent width problem may reflect an anteroposterior or positional discrepancy rather than true maxillary transverse deficiency.",
+            "Normal facial proportions exclude every skeletal discrepancy.",
+            "A bonded Hyrax is indicated because it also corrects mandibular position.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A late mixed-dentition patient needs skeletal maxillary expansion. Imaging and age suggest greater midpalatal suture interdigitation than in a younger child. Which appliance design best addresses the increased resistance?",
+          choices: [
+            "A lightly retained split plate contacting only two incisors",
+            "A chin cup directed below the condyles",
+            "A removable FR-III worn part time",
+            "A fixed Hyrax screw appliance anchored to multiple teeth for broad force distribution",
+          ],
+          answer: "D",
+        },
+        {
+          q: "A 16-year-old has an MSDR of 0.86, but chronological age, cervical maturation, clinical findings, and other CBCT features do not all indicate the same degree of suture maturation. How should the clinician use the MSDR result?",
+          choices: [
+            "Treat it as one part of a case-by-case maturity assessment rather than using it alone to mandate surgical expansion.",
+            "Use the high value alone to diagnose complete fusion and prescribe SARPE automatically.",
+            "Ignore all imaging because chronological age is the only valid maturity measure.",
+            "Select conventional W-Arch expansion because every value above 0.8 indicates a soft, easily opened suture.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A clinician stops active rapid palatal expansion as soon as the crossbite is corrected and removes the appliance the next day. Which failure mechanism is most likely?",
+          choices: [
+            "The maxilla will continue expanding because suture opening is self-propagating.",
+            "The teeth will become ankylosed because rapid expansion was stopped.",
+            "Relapse is likely because the tissues and newly opened suture were not retained long enough for new bone formation.",
+            "The mandible will widen skeletally through its midline suture.",
+          ],
+          answer: "C",
+        },
+        {
+          q: "An 8-year-old has maxillary deficiency, anterior crossbite, and a narrow maxilla. The family reports good expected wear compliance. Which plan best addresses both the sagittal and transverse components?",
+          choices: [
+            "Chin cup alone with heavy force directed at the condyles",
+            "FR-III alone with no transverse correction",
+            "Palatal expansion combined with front-pull facemask therapy using approximately 350 to 450 g per side for 12 to 14 hours daily",
+            "BAMP immediately, even though bone maturity is inadequate for stable miniplate screws",
+          ],
+          answer: "C",
+        },
+        {
+          q: "An 11-year-old patient with erupted permanent mandibular canines has maxillary deficiency. The main priority is maxillary skeletal protraction with fewer dental side effects, and the family accepts surgery. Which treatment is the best match?",
+          choices: [
+            "Full-time FR-III because it predictably advances the maxilla 4 to 5 mm skeletally",
+            "Heavy chin-cup therapy because it permanently arrests condylar growth",
+            "Tooth-borne facemask therapy because it produces more skeletal and fewer dental changes than miniplates",
+            "Bone-anchored maxillary protraction with zygomatic and mandibular miniplates and Class III elastics",
+          ],
+          answer: "D",
+        },
+        {
+          q: "Two patients have similar maxillary deficiency. Patient 1 is 8 years old; Patient 2 is 11 years old with adequate bone density and erupted mandibular canines. Which comparison best explains a rational difference in treatment?",
+          choices: [
+            "Patient 1 may be treated with a removable functional/orthopedic appliance to modify growth, while Patient 2 has less growth remaining and may be a better candidate for bone-anchored maxillary protraction (BAMP).",
+            "Both patients should receive identical treatment because their deficiencies are similar in magnitude.",
+            "Patient 2 should be treated with a fixed functional appliance because growth modification is more effective after the pubertal spurt.",
+            "Neither patient should be treated until growth has completely finished.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A child with a prominent chin is being considered for chin-cup therapy. The parents expect the appliance to stop mandibular growth. Which analysis should guide consent?",
+          choices: [
+            "Chin-cup therapy predictably halts mandibular growth, so the parents' expectation is reasonable.",
+            "Chin-cup therapy mainly redirects or restrains growth to a limited degree and is not a reliable way to stop mandibular growth, so expectations must be tempered and relapse or later surgery discussed.",
+            "Chin-cup therapy works by opening the midpalatal suture, so it has no effect on the mandible.",
+            "Chin-cup therapy is contraindicated in all growing children.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "An 8-year-old completes successful facemask treatment. The parents ask why long-term prognosis and possible future surgery still need discussion. Which explanation is best?",
+          choices: [
+            "Facemask correction always disappears when the appliance is removed.",
+            "Continued mandibular growth creates a meaningful relapse risk, estimated at about 25 percent.",
+            "Palatal expansion prevents any later Class III relapse but may create a Class I problem.",
+            "The only relapse mechanism is loss of molar bands during active treatment.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A cooperative 9-year-old has a moderate Class II relationship but no incisor trauma risk, severe esthetic concern, spacing problem, or psychosocial distress. Which timing decision is most efficient?",
+          choices: [
+            "Begin two-phase treatment now because early treatment gives a better long-term result in most children.",
+            "Wait until growth is complete so a functional appliance can stimulate true mandibular enlargement.",
+            "Use Class II elastics now because their main effect is skeletal mandibular growth.",
+            "Monitor and plan growth modification near the adolescent growth spurt because routine early treatment is usually no more effective and is less efficient.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "An 8-year-old has markedly protruded maxillary incisors, repeated lip trauma, and distress about appearance. How should these findings alter the usual Class II timing decision?",
+          choices: [
+            "They rule out growth modification because early treatment never changes short-term risk.",
+            "They indicate waiting until adulthood because psychosocial effects cannot improve temporarily.",
+            "They provide a reasonable indication for early treatment even though long-term occlusal outcomes may require later treatment.",
+            "They require BAMP because dental protrusion is always caused by maxillary skeletal excess.",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A Class II patient needs continuous mandibular advancement but repeatedly fails to wear a removable Twin-Block. Which revision best addresses the main barrier while acknowledging a new risk?",
+          choices: [
+            "Continue the same removable appliance because wear time does not affect functional treatment.",
+            "Use headgear only because every Class II case is caused by maxillary excess.",
+            "Stop treatment because fixed correctors produce no skeletal or dental changes.",
+            "Consider a fixed corrector such as Herbst, MARA, cemented Twin-Block, or Forsus while monitoring for breakage and rebound.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "Patient A has a definitive maxillary skeletal excess. Patient B has a clear mandibular deficiency with no important maxillary excess. Which appliance pairing best matches the dominant skeletal complication?",
+          choices: [
+            "Headgear for patient A and a mandibular advancement functional appliance for Patient B",
+            "Functional appliance for patient A and headgear for Patient B",
+            "Chin cup for patient A and facemask for patient B",
+            "Facemask for patient A and chin cup for patient B",
+          ],
+          answer: "A",
+        },
+        {
+          q: "An early permanent-dentition patient has mandibular deficiency, normal to slightly increased anterior face height, and poor likely compliance with removable wear. Which appliance feature makes the Herbst a reasonable choice?",
+          choices: [
+            "It depends on the patient choosing to posture forward only during meals.",
+            "It holds the mandible forward continuously and may intrude posterior maxillary teeth while producing maxillary restraint and mandibular advancement.",
+            "It opens the midpalatal suture through 10 to 20 pounds of force.",
+            "It primarily restrains excessive mandibular growth by loading the condyles.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A clinician records a removable functional appliance bite with 10 mm of initial mandibular advancement and only 2 mm of vertical opening. The patient cannot maintain the posture comfortably. Which modification is best?",
+          choices: [
+            "Increase advancement further because comfort improves as the muscles stretch.",
+            "Eliminate all vertical opening because functional appliances require the teeth to remain in full occlusion.",
+            "Keep the registration because discomfort is unrelated to compliance.",
+            "Reduce initial advancement to about 4 to 6 mm and use about 3 to 4 mm of opening, adding greater molar opening only when vertical control requires it.",
+          ],
+          answer: "D",
+        },
+        {
+          q: "Nine months after delivery of a functional appliance, records show little anteroposterior change despite adequate remaining growth. What is the most appropriate next step?",
+          choices: [
+            "Continue unchanged until growth ends because lack of response cannot be evaluated before two years.",
+            "Increase advancement without checking fit, wear, or tissue response.",
+            "Reassess compliance, appliance design, and biologic response with progress records, then establish a new plan if the cause cannot be corrected.",
+            "Assume true mandibular stimulation has occurred even though records show no change.",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A Class II patient has increased lower facial height and an anterior open bite. Which design priority best limits worsening of the vertical pattern?",
+          choices: [
+            "Encourage posterior eruption with cervical headgear and remove all bite blocks.",
+            "Control posterior eruption with high-pull headgear or vertical-control bite blocks to limit further backward mandibular rotation.",
+            "Use a split removable plate solely to create more transverse dental tipping.",
+            "Direct a facemask downward to increase vertical maxillary excess.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A Class II patient has a short lower face and deep bite. The clinician must improve the sagittal relationship without worsening the reduced facial height. Which strategy best fits the growth pattern?",
+          choices: [
+            "Use a functional appliance designed to allow posterior eruption while controlling the anterior teeth and advancing the mandible.",
+            "Use high-pull headgear to intrude posterior teeth and further reduce lower facial height.",
+            "Block posterior eruption completely because every Class II patient benefits from vertical restraint.",
+            "Use SARPE because deep bite indicates a fused midpalatal suture.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A child develops chin deviation toward the side of a previous condylar fracture. A proposed plan uses prolonged rigid fixation and permits only hinge opening after release. Which alternative better supports future mandibular growth?",
+          choices: [
+            "Open reduction with longer fixation to eliminate all condylar movement",
+            "Short fixation, often with intermaxillary elastics, followed by an early return to function that includes condylar translation",
+            "No movement until facial growth is complete because translation interferes with regeneration",
+            "Heavy chin-cup force directed through the injured condyle",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A growing adolescent girl has progressive mandibular asymmetry because one side is growing excessively. Which prognosis and planning statement is most accurate?",
+          choices: [
+            "Restraining unilateral mandibular excess is difficult during growth, so progression must be monitored and orthognathic surgery may be needed at maturity.",
+            "A removable plate predictably stops growth on the excessive side and permanently centers the chin.",
+            "The maxilla cannot be affected because mandibular asymmetry has no secondary effects.",
+            "Early correction is always stable because asymmetric excess decreases as the child ages.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "An adult Class III patient has both midfacial retrusion and mandibular prominence. When the lower face is masked, the maxillary deficiency remains obvious. When the midface is masked, the mandible still appears prominent. Which treatment plan is most appropriate?",
+          choices: [
+            "Maxillary advancement combined with mandibular setback",
+            "Maxillary advancement alone",
+            "Mandibular setback alone",
+            "Orthodontic camouflage only",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A patient previously received orthodontic camouflage for Class III malocclusion. He now has minimal overjet, but his profile still shows maxillary deficiency and a prominent mandible. He chooses orthognathic surgery. Which pre-surgical orthodontic approach is most appropriate?",
+          choices: [
+            "Procline the maxillary incisors and retract the mandibular incisors",
+            "Retract the maxillary incisors and procline the mandibular incisors",
+            "Maintain the existing incisor positions because the overjet is minimal",
+            "Retract both the maxillary and mandibular incisors.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A long-face Class II patient has an anterior open bite caused mainly by downward-backward rotation of the mandible. Which surgical movement would provide the most stable correction?",
+          choices: [
+            "Superior repositioning of the maxilla, allowing the mandible to rotate upward and forward",
+            "Posterior maxillary impaction with mandibular setback",
+            "Anterior maxillary impaction with mandibular advancement",
+            "Posterior maxillary impaction with mandibular advancement",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A skeletally mature patient has a severe transverse maxillary deficiency but no significant vertical or AP maxillary problem. Which procedure is most appropriate?",
+          choices: [
+            "BSSO advancement",
+            "Isolated genioplasty",
+            "Surgically assisted rapid palatal expansion",
+            "Le Fort I maxillary setback",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A patient with severe obstructive sleep apnea requires surgical enlargement of the upper airway. Which plan is generally most effective while still requiring careful evaluation of facial appearance and occlusion?",
+          choices: [
+            "Mandibular setback",
+            "Maxillomandibular advancement",
+            "Maxillary setback",
+            "Genioplasty alone",
+          ],
+          answer: "B",
+        },
+        {
+          q: "An adult has thin periodontal tissue and minimal attached gingiva around the mandibular incisors. Pre-surgical treatment will include incisor expansion followed by mandibular advancement. What should the treatment team consider before these procedures?",
+          choices: [
+            "Further expansion to stimulate gingival growth",
+            "Extraction of the maxillary incisors",
+            "A gingival graft to reduce the risk of recession",
+            "Delaying periodontal treatment until after surgery",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A 16-year-old girl with a severe Class III skeletal discrepancy appears physically mature, but the orthodontist is uncertain whether mandibular growth has ended to recommend surgery. What is the best next step?",
+          choices: [
+            "Begin mandibular setback surgery immediately",
+            "Use serial cephalometric radiographs to confirm that active growth has stopped",
+            "Begin permanent orthodontic camouflage",
+            "Evaluate only the patient's chronological age",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A patient has impacted mandibular third molars and is scheduled for BSSO with rigid internal fixation in four months. What is the most appropriate modification to the plan?",
+          choices: [
+            "Remove the third molars during BSSO",
+            "Leave the third molars because they do not affect fixation",
+            "Remove the third molars now and delay BSSO until at least six months after their removal",
+            "Replace rigid fixation with jaw wiring",
+          ],
+          answer: "C",
+        },
+        {
+          q: "Patient A has a 6-mm anterior open bite, while Patient B has a 9-mm anterior open bite. Both are being evaluated for closure through TAD-supported posterior intrusion. Which conclusion is most appropriate?",
+          choices: [
+            "Both patients are equally suitable for TAD treatment",
+            "Patient A is near the practical limit for TAD treatment, while Patient B is more likely to require surgery",
+            "Patient B is a better TAD candidate because a larger open bite permits more intrusion",
+            "Neither patient can be treated with posterior intrusion",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A patient has severe anterior crowding. A flexible NiTi archwire is deflected significantly when it is tied into the brackets. Why will this wire help align the teeth?",
+          choices: [
+            "The wire attempts to return to its original shape and transfers controlled forces to the teeth.",
+            "The brackets become thicker and push the teeth into alignment.",
+            "The wire permanently changes shape to match the crowded teeth.",
+            "The wire prevents all movement until a rectangular wire is placed.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "During the finishing stage, a full-size archwire remains active when tied into the bracket of a maxillary lateral incisor. What is the best interpretation?",
+          choices: [
+            "The tooth has reached its ideal three-dimensional position.",
+            "The archwire is too flexible to move the tooth.",
+            "The tooth or bracket has not yet reached its intended position.",
+            "The bracket prescription is no longer important.",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A patient has completed initial alignment and leveling, but extraction spaces remain and the molar relationship is still incorrect. What is the most appropriate next step?",
+          choices: [
+            "Remove the appliance and provide retainers.",
+            "Begin space closure and bite correction using heavier wires and appropriate auxiliaries.",
+            "Return to a smaller flexible NiTi wire permanently.",
+            "Reposition every bracket before attempting space closure.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "An orthodontist using standard edgewise brackets must place numerous in-out, tip, and torque bends in the archwire. Why?",
+          choices: [
+            "The identical brackets do not contain tooth-specific positioning information",
+            "The archwire is too flexible to move the teeth",
+            "The brackets are too thick to allow proper tooth movement",
+            "The archwire is too stiff to express the built-in prescription",
+          ],
+          answer: "A",
+        },
+        {
+          q: "From the occlusal view, a premolar is positioned too lingually, but its MD tip and BL root inclination are correct. Which type of correction is primarily needed?",
+          choices: [
+            "First-order in-out correction",
+            "Second-order tip correction",
+            "Third-order torque correction",
+            "Vertical leveling correction",
+          ],
+          answer: "C",
+        },
+        {
+          q: "From the labial view, a cnanine crown is tipped distally and its root apex is positioned too mesially. Which adjustment would most directly correct this problem?",
+          choices: [
+            "A first-order bend to move the entire tooth buccally",
+            "A torque adjustment viewed from the proximal surface",
+            "A second-order adjustment to move the crown mesially and the root distally",
+            "A change in bracket thickness to rotate the tooth",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A maxillary incisor appears properly aligned from the facial view. However, the angle between its long axis and a line perpendicular to the occlusal plane is incorrect when viewed proximally. Which bracket value should be evaluated?",
+          choices: ["Rotation", "In-out", "Tip", "Torque"],
+          answer: "D",
+        },
+        {
+          q: "A clinic changes from standard edgewise brackets to an MBT preadjusted straight-wire appliance. What clinical change should be expected?",
+          choices: [
+            "More first-, second-, and third-order bends will be required.",
+            "Fewer wire bends will be needed because tooth-specific information is built into the brackets.",
+            "Only round archwires can be used.",
+            "Bracket positioning will no longer affect treatment results.",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A bracket has the correct prescription for a maxillary central incisor, but it was not centered correctly on the FA point. The final tooth position is different from the intended result. What is the most likely explanation?",
+          choices: [
+            "Incorrect bracket placement prevented proper expression of the prescription.",
+            "The archwire automatically removed the built-in prescription.",
+            "The tooth could not respond because the bracket contained torque.",
+            "The FA point is used only with standard edgewise brackets.",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A maxillary incisor crown appears aligned, but closer evaluation shows that its root requires buccolingual correction. Which mechanical approach would most directly address this problem?",
+          choices: [
+            "Use only a round wire to produce first-order movement.",
+            "Increase bracket thickness without engaging the slot.",
+            "Engage an appropriate rectangular wire in the rectangular bracket slot to express third-order torque.",
+            "Use an intermaxillary elastic without changing the archwire.",
+          ],
+          answer: "C",
+        },
+        {
+          q: "A patient wears a Hawley appliance with a canine retracting spring to move a displaced maxillary canine both distally and lingually. The appliance fits well, but the tooth does not move because the acrylic contacts its lingual surface. What is the best correction?",
+          choices: [
+            "Increase the thickness of the baseplate",
+            "Create relief in the acrylic in the direction of movement",
+            "Add a posterior bite plane",
+            "Replace the finger spring with a clasp",
+          ],
+          answer: "B",
+        },
+        {
+          q: "Two finger springs have the same wire diameter and length. The helix of Spring A opens during activation, while the helix of Spring B closes. Which spring design is preferred, and why?",
+          choices: [
+            "Spring A, because it provides a longer range of action and more physiologic force",
+            "Spring A, because it produces a stronger and less controlled force",
+            "Spring B, because closing the helix increases the range of action",
+            "Spring B, because it eliminates the risk of tooth tipping",
+          ],
+          answer: "A",
+        },
+        {
+          q: "A patient's expansion screw must produce a total expansion of approximately 0.5 mm. According to the activation rate described in the presentation, which activation schedule provides this amount?",
+          choices: [
+            "One quarter-turn",
+            "Two quarter-turns",
+            "Three quarter-turns",
+            "One complete turn",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A patient has a deep bite. The treatment goal is to separate the posterior teeth and allow them to erupt. Which Hawley modification is most appropriate?",
+          choices: [
+            "Posterior bite plane",
+            "Anterior bite plane",
+            "Tongue guard",
+            "Expansion screw",
+          ],
+          answer: "B",
+        },
+        {
+          q: "A maxillary incisor is in anterior crossbite. An active spring has been added, but the lower incisors prevent the maxillary incisor from moving labially. Which modification would best address the problem?",
+          choices: [
+            "Anterior bite plane",
+            "Posterior bite plane",
+            "Lingual arch",
+            "Labial bow used only for retention",
+          ],
+          answer: "B",
+        },
+      ];
+
+      const choiceToIndex = {
+        A: 1,
+        B: 2,
+        C: 3,
+        D: 4,
+      };
+
+      function renderQuestions() {
+        const container = document.getElementById("questions");
+        container.innerHTML = "";
+
+        questions.forEach((item, idx) => {
+          const h3 = document.createElement("h3");
+          const num = document.createElement("span");
+          num.className = "qnum";
+          num.textContent = idx + 1 + ".";
+          h3.appendChild(num);
+          h3.appendChild(document.createTextNode(" " + item.q));
+
+          const ul = document.createElement("ul");
+          const lettered = item.choices.length > 1;
+          const letters = ["A", "B", "C", "D"];
+
+          item.choices.forEach((text, i) => {
+            const li = document.createElement("li");
+            li.textContent = lettered ? letters[i] + ". " + text : text;
+            ul.appendChild(li);
+          });
+
+          if (item.answer && choiceToIndex[item.answer]) {
+            ul.dataset.correct = String(choiceToIndex[item.answer]);
+          } else {
+            ul.classList.add("noAnswer");
+            const note = document.createElement("div");
+            note.className = "feedback";
+            note.style.color = "#6b7280";
+            note.textContent = "(No correct answer recorded for this item.)";
+            ul.appendChild(note);
+          }
+
+          container.appendChild(h3);
+          container.appendChild(ul);
+        });
+      }
+
+      let quizInitialized = false;
+      function initQuiz() {
+        if (quizInitialized) return;
+        quizInitialized = true;
+
+        renderQuestions();
+
+        document.querySelectorAll("ul[data-correct]").forEach((list) => {
+          const index = parseInt(list.dataset.correct, 10) - 1;
+          const answers = list.querySelectorAll("li");
+          answers.forEach((li, i) => {
+            li.addEventListener("click", () => {
+              answers.forEach((a) =>
+                a.classList.remove("correct", "incorrect"),
+              );
+              li.classList.add(i === index ? "correct" : "incorrect");
+
+              let fb = list.querySelector(".feedback");
+              if (!fb) {
+                fb = document.createElement("div");
+                fb.className = "feedback";
+                list.appendChild(fb);
+              }
+              fb.textContent = i === index ? "✅ Correct!" : "❌ Try again.";
+              fb.style.color = i === index ? "green" : "red";
+            });
+          });
+        });
+      }
+
+      // ===== Password Gate =====
+      const correctPassword = "admin123";
+      const loginWrap = document.getElementById("loginWrap");
+      const passwordInput = document.getElementById("passwordInput");
+      const loginBtn = document.getElementById("loginBtn");
+      const loginError = document.getElementById("loginError");
+      const questionsEl = document.getElementById("questions");
+
+      function showLoginError(message) {
+        if (!loginError) return;
+        loginError.textContent = message;
+        loginError.style.display = "block";
+      }
+
+      function hideLoginError() {
+        if (!loginError) return;
+        loginError.textContent = "";
+        loginError.style.display = "none";
+      }
+
+      function attemptLogin() {
+        const entered = (passwordInput.value || "").trim();
+        if (entered === correctPassword) {
+          hideLoginError();
+          if (loginWrap) loginWrap.style.display = "none";
+          if (questionsEl) questionsEl.style.display = "block";
+          initQuiz();
+        } else {
+          showLoginError("Incorrect password. Try again.");
+          passwordInput.focus();
+        }
+      }
+
+      if (loginBtn && passwordInput) {
+        loginBtn.addEventListener("click", attemptLogin);
+        passwordInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") attemptLogin();
+        });
+        passwordInput.focus();
+      }
+    </script>
+  </body>
+</html>
